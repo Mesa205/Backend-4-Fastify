@@ -1,7 +1,7 @@
 //Importamos nuestro modelo 
 import { encryptPassword } from "../helpers/encryptPassword.js";
 import { generateToken } from "../helpers/generateToken.js";
-import { response } from "../helpers/Response.js";
+import { response } from "../helpers/response.js";
 
 import { userModel } from "../models/user.model.js";
 import bcrypt from "bcrypt"

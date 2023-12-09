@@ -2,7 +2,7 @@
 //es decir si el usuario no esta logueado o registrado no puede ser sus post subidos ni poder editarlos
 
 import jwt from "jsonwebtoken";
-import { response } from "../helpers/Response.js";
+import { response } from "../helpers/response.js";
 import { userModel } from "../models/user.model.js";
 
 

@@ -1,50 +1,26 @@
-import postCtrol from "../controllers/post.controller.js";
-import { upload } from "../middleware/imgUpload.js";
-// import { check } from "express-validator";
-// import { validFields } from "../middleware/ValidFields.js";
+import postCtrl from "../controllers/post.controller.js";
 import { verifyToken } from "../middleware/auth.js";
+import { upload } from "../middleware/imgUpload.js";
+
+const middleware = (req, reply, done) => {
+  verifyToken(req, reply, done);
+};
 
 export const postRoutes = (fastify, opts, done) => {
-  fastify.get("/", { preHandler: [verifyToken] }, postCtrol.listar);
-  fastify.get(
-    "/userpost",
-    { preHandler: [verifyToken] },
-    postCtrol.listarPostLogin
-  );
-
+  fastify.get("/", { preHandler: [middleware] }, postCtrl.listar);
+  fastify.get("/user", { preHandler: [middleware] }, postCtrl.listarPostLogin);
+  fastify.get("/:id", { preHandler: [middleware] }, postCtrl.listOne);
   fastify.post(
     "/",
-    {
-      // schema: {
-      //   body: {
-      //     type: "object",
-      //     required: ["title", "description"],
-      //     properties: {
-      //       title: {
-      //         type: "string",
-      //         minLength: 1,
-      //         maxLength: 20,
-      //       },
-      //       description: {
-      //         type: "string",
-      //         minLength: 1,
-      //         maxLength: 50,
-      //       },
-      //     },
-      //   },
-      // },
-      preHandler: [verifyToken, upload.single("img")],
-    },
-
-    postCtrol.add
+    { preValidation: [middleware, upload.single("img")] },
+    postCtrl.add
   );
-
-  fastify.get("/:id", { preHandler: [verifyToken,] }, postCtrol.listarById);
-  fastify.delete("/:id", { preHandler: [verifyToken] }, postCtrol.delete);
+  fastify.delete("/:id", { preHandler: [middleware] }, postCtrl.delete);
   fastify.put(
     "/:id",
-    { preHandler: [verifyToken, upload.single("img")] },
-    postCtrol.update
+    { preValidation: [middleware, upload.single("img")] },
+
+    postCtrl.update
   );
 
   done();
